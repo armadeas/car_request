@@ -1,4 +1,4 @@
-@include('layouts/header')
+<?php echo $__env->make('layouts/header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
   <!-- Full Width Column -->
   <div class="content-wrapper">
     <div class="container">
@@ -18,7 +18,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-9">
             <div class="box box-danger box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Booking Request</h3>
@@ -30,113 +30,117 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form class="form-horizontal" method="POST" action="<?php echo base_url('main/submit') ?>">
+              <form class="form-horizontal" method="POST" action="<?php echo base_url('main/process') ?>">
                 <div class="box-body">
 
                   <div class="form-group">
                     <label for="ticket" class="col-sm-3 control-label">Ticket</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="ticket" name="ticket" value="TRAN<?php echo date('Y') ?>-XXXXXXX" readonly>
+                      <input type="text" class="form-control" id="ticket" name="ticket" value="<?php echo $tran->ticket ?>" readonly>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="emp_id" class="col-sm-3 control-label">Emp ID</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="emp_id" name="emp_id" value="<?php echo $user->emp_id ?>" readonly>
+                      <input type="text" class="form-control" id="emp_id" name="emp_id" value="<?php echo $tran->emp_id ?>" readonly>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="user_name" class="col-sm-3 control-label">Emp Name</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="user_name" name="user_name" value="<?php echo $user->user_name ?>" readonly>
+                      <input type="text" class="form-control" id="user_name" name="user_name" value="<?php echo $tran->user_name ?>" readonly>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="divisi_name" class="col-sm-3 control-label">Division</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="divisi_name" name="divisi_name" value="<?php echo $user->divisi_name ?>" readonly>
+                      <input type="text" class="form-control" id="divisi_name" name="divisi_name" value="<?php echo $tran->divisi_name ?>" readonly>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="purpose" class="col-sm-3 control-label">Purpose</label>
                     <div class="col-sm-9">
-                      <select name="purpose" id="purpose" class="form-control">
-                        <option value="Operational">Operational</option>
-                        <option value="Trip">Trip</option>
-                        <option value="Project">Project</option>
+                      <select name="purpose" id="purpose" class="form-control" readonly>
+                        <option value="Operational" <?php if($tran->purpose == 'Operational') echo 'selected' ?>>Operational</option>
+                        <option value="Trip" <?php if($tran->purpose == 'Trip') echo 'selected' ?>>Trip</option>
+                        <option value="Project" <?php if($tran->purpose == 'Project') echo 'selected' ?>>Project</option>
                       </select>
                     </div>
                   </div>
 
-                  <div class="form-group" id="trip_number_f">
-                    <label for="trip_number" class="col-sm-3 control-label">Trip Number</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="trip_number" name="trip_number" placeholder="Trip Number">
+                  <?php if ($tran->purpose == 'Trip' || $tran->purpose == 'Project'): ?>
+                    <div class="form-group" id="trip_number_f">
+                      <label for="trip_number" class="col-sm-3 control-label">Trip Number</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="trip_number" name="trip_number" placeholder="Trip Number" value="<?php echo $tran->trip_number ?>" readonly>
+                      </div>
                     </div>
-                  </div>
+                  <?php endif ?>
+                  
+                  <?php if ($tran->purpose == 'Project'): ?>
 
-                  <div class="form-group" id="project_number_f">
-                    <label for="project_number" class="col-sm-3 control-label">Project Number</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="project_number" name="project_number" placeholder="Project Number">
+                    <div class="form-group" id="project_number_f">
+                      <label for="project_number" class="col-sm-3 control-label">Project Number</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="project_number" name="project_number" placeholder="Project Number" value="<?php echo $tran->project_number ?>" readonly>
+                      </div>
                     </div>
-                  </div>
+                  <?php endif ?>
 
                   <div class="form-group">
                     <label for="pickup" class="col-sm-3 control-label">Pickup Location</label>
-                    <div class="col-sm-3">
-                      <select name="city_pickup" id="city_pickup" class="form-control">
-                      </select>
-                    </div>
-                    <div class="col-sm-3">
-                      <select name="districts_pickup" id="districts_pickup" class="form-control">
-                      </select>
-                    </div>
-                    <div class="col-sm-3">
-                      <select name="villages_pickup" id="villages_pickup" class="form-control">
-                      </select>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="pickup" name="pickup" value="<?php echo $model_helper->get_location('City,Districts,Villages', $tran->pickup_location) ?>" readonly>
+                      
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="dropoff" class="col-sm-3 control-label">Dropoff Location</label>
-                    <div class="col-sm-3">
-                      <select name="city_dropoff" id="city_dropoff" class="form-control">
-                      </select>
-                    </div>
-                    <div class="col-sm-3">
-                      <select name="districts_dropoff" id="districts_dropoff" class="form-control">
-                      </select>
-                    </div>
-                    <div class="col-sm-3">
-                      <select name="villages_dropoff" id="villages_dropoff" class="form-control">
-                      </select>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="dropoff" name="dropoff" value="<?php echo $model_helper->get_location('City,Districts,Villages', $tran->dropoff_location) ?>" readonly>
+                      
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="booking_time" class="col-sm-3 control-label">Booking Time</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="booking_time" name="booking_time" placeholder="">
+                      <input type="text" class="form-control" id="dropoff" name="dropoff" value="<?php echo $tran->pickup_time . ' - '. $tran->dropoff_time ?>" readonly>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="notes" class="col-sm-3 control-label">Notes</label>
                     <div class="col-sm-9">
-                      <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
+                      <textarea class="form-control" name="notes" id="notes" rows="3" readonly><?php echo $tran->notes ?></textarea>
                     </div>
                   </div>
+
+                  <?php if ($tran->status > 1): ?>
+                    <div class="form-group">
+                    <label for="car_id" class="col-sm-3 control-label">Car Reserved</label>
+                    <div class="col-sm-9">
+                      <select name="car_id" id="car_id" class="form-control" <?php echo $tran->status > 2 ? 'readonly' : '' ?>>
+                        <?php foreach ($list_cars->result() as $car): ?>
+                          
+                        <option value="<?php echo $car->car_id ?>" <?php if($car->car_id == $tran->car_id) echo 'selected' ?>><?php echo $car->car_brand . ' ' . $car->car_type . ' ' . $car->car_plate ?></option>
+                        <?php endforeach ?>
+                      </select>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-info pull-right">Submit</button>
+                  <?php endif ?>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
+                <!-- <div class="box-footer">
                   <a href="<?php echo site_url() ?>" title="Cancel" class="btn btn-default">Cancel</a>
                   <button type="submit" class="btn btn-info pull-right">Submit</button>
-                </div>
+                </div> -->
                 <!-- /.box-footer -->
               </form>
             </div>
@@ -144,7 +148,7 @@
           </div>
           <!-- /.box -->
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="box box-info box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Tools</h3>
@@ -156,27 +160,11 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Recent Booking</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><a href="" title="">TRAN2019-000001</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="" title="">TRAN2019-000001</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="" title="">TRAN2019-000001</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="" title="">TRAN2019-000001</a></td>
-                  </tr>
-                </tbody>
-              </table>
+              <?php if ($tran->status == 1 && $tran->lead_id == $session['emp_id']): ?>
+                <a href="<?php echo base_url('main/approve/'.$tran->ticket) ?>" class="btn btn-success btn-block">Approve</a>
+                <a href="<?php echo base_url('main/reject/'.$tran->ticket) ?>" class="btn btn-danger btn-block">Reject</a>
+              <?php endif ?>
+              <a href="<?php echo base_url('main') ?>" class="btn btn-default btn-block">Cancel</a>
 
             </div>
             <!-- /.box-body -->
@@ -190,7 +178,7 @@
     <!-- /.container -->
   </div>
   <!-- /.content-wrapper -->
-@include('layouts/footer')
+<?php echo $__env->make('layouts/footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 <script>
   $(function () {
 

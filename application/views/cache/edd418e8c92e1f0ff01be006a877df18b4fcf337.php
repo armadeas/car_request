@@ -44,16 +44,19 @@
                  </tr>
                </thead>
                <tbody>
+                <?php foreach ($trans->result() as $tran): ?>
+                  
                  <tr>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
-                   <td>data</td>
+                   <td><?php echo $tran->ticket ?></td>
+                   <td><?php echo $tran->user_name ?></td>
+                   <td><?php echo $tran->request_time ?></td>
+                   <td><?php echo $tran->pickup_time ?></td>
+                   <td><?php echo $model_helper->get_location('City,Districts', $tran->pickup_location) ?></td>
+                   <td><?php echo $tran->purpose ?></td>
+                   <td><?php echo status_tran($tran->status) ?></td>
+                   <td><a href="<?php echo base_url('main/view/'.$tran->ticket) ?>" title="Click to View detail this Request" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
                  </tr>
+                <?php endforeach ?>
                </tbody>
              </table>
             </div>

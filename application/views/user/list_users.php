@@ -33,7 +33,7 @@
                   <!-- Profile Image -->
                   <div class="box box-primary">
                     <div class="box-body box-profile">
-                      <img class="profile-user-img img-responsive img-circle" src="<?php echo base_url(); ?>photo/users/<?php echo $user->user_photo ?>" alt="User profile picture">
+                      <img class="profile-user-img img-responsive img-circle" src="<?php echo $user->user_photo ?>" alt="User profile picture">
 
                       <h3 class="profile-username text-center"><?php echo  $user->user_name ?></h3>
 
@@ -51,7 +51,7 @@
                         </li>
                       </ul>
 
-                      <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                      <!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
                     </div>
                     <!-- /.box-body -->
                   </div>

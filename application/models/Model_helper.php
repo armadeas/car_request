@@ -30,6 +30,25 @@ class Model_helper extends CI_Model {
 		return $this->db->get();
 	}
 
+	public function get_location($param, $data)
+	{
+		$params = explode(',', $param);
+		$datas = explode(',', $data);
+		$out = '';
+		foreach ($params as $param) {
+			if ($param == 'City') {
+				$out .= $this->db->get_where('regencies', array('id' => $datas[0]))->row()->name . ', ';
+			}else if ($param == 'Districts') {
+				$out .= $this->db->get_where('districts', array('id' => $datas[1]))->row()->name;
+			}else if ($param == 'Villages') {
+				$out .= ', '.$this->db->get_where('villages', array('id' => $datas[2]))->row()->name;
+			}
+		}
+
+		return $out;
+	}
+
+
 }
 
 /* End of file model_helper.php */

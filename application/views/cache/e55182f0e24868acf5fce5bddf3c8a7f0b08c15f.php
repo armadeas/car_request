@@ -134,7 +134,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                  <a href="<?php echo site_url('news') ?>" title="Cancel" class="btn btn-default">Cancel</a>
+                  <a href="<?php echo site_url() ?>" title="Cancel" class="btn btn-default">Cancel</a>
                   <button type="submit" class="btn btn-info pull-right">Submit</button>
                 </div>
                 <!-- /.box-footer -->
